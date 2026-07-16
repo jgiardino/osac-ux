@@ -31,8 +31,7 @@ keep `AiVisionIcons.tsx` in sync.
 | `rh-ui-path-icon.svg` | Pipelines | `RhUiPathIcon` |
 | `rh-ui-ai-edit-icon.svg` | Playground | `RhUiAiEditIcon` |
 | `rh-ui-key-icon.svg` | API keys | `RhUiKeyIcon` |
-
-**AI asset endpoints** still uses PatternFly `CloudIcon` until you add a SVG here.
+| `rh-ui-location-pin-icon.svg` | AI asset endpoints | `RhUiLocationPinIcon` |
 
 ## How to swap artwork
 

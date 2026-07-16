@@ -7,20 +7,20 @@ import type { SVGIconProps } from '@patternfly/react-icons/dist/esm/createIcon';
 import BalanceScaleIcon from '@patternfly/react-icons/dist/esm/icons/balance-scale-icon';
 import CatalogIcon from '@patternfly/react-icons/dist/esm/icons/catalog-icon';
 import ChartLineIcon from '@patternfly/react-icons/dist/esm/icons/chart-line-icon';
-import CloudIcon from '@patternfly/react-icons/dist/esm/icons/cloud-icon';
 import MicrochipIcon from '@patternfly/react-icons/dist/esm/icons/microchip-icon';
 
 import {
   RhUiAiEditIcon,
   RhUiBuildIcon,
   RhUiKeyIcon,
+  RhUiLocationPinIcon,
   RhUiPathIcon,
 } from '../assets/ai-vision-icons/AiVisionIcons';
 
 const AI_VISION_NAV_ICONS: Record<string, ComponentType<SVGIconProps>> = {
   workbenches: RhUiBuildIcon,
   pipelines: RhUiPathIcon,
-  'ai-asset-endpoints': CloudIcon,
+  'ai-asset-endpoints': RhUiLocationPinIcon,
   playground: RhUiAiEditIcon,
   'api-keys': RhUiKeyIcon,
   'gpu-status': MicrochipIcon,
