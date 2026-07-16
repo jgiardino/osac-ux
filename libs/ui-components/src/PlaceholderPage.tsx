@@ -1,6 +1,6 @@
 import { Stack, StackItem, Title } from '@patternfly/react-core';
 
-import { SubtleContent } from '../components/SubtleContent/SubtleContent';
+import { SubtleContent } from './components/SubtleContent/SubtleContent';
 
 import './PlaceholderPage.css';
 

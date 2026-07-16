@@ -1,5 +1,5 @@
 // AUTO-GENERATED — run `pnpm gen:api-diff` to regenerate. Do not edit manually.
-// Generated: 2026-07-05T09:39:16.899Z
+// Generated: 2026-07-15T20:38:44.752Z
 
 export interface ApiDiffEntry {
   route: string;

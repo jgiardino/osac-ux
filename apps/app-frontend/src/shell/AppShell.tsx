@@ -66,9 +66,11 @@ import { VmDetailsPage } from '@osac/ui-components/pages/tenant/VmDetailsPage';
 import { VmListPage } from '@osac/ui-components/pages/tenant/VmListPage';
 import type { DemoShellRole } from '@osac/ui-components/shellTypes';
 
+import { AiVisionLayerProvider, useAiVisionLayer } from './AiVisionLayerContext';
 import { ShellMasthead } from './ShellMasthead';
 import { defaultRouteForRole } from './shellRoutes';
 import { ShellSidebar } from './ShellSidebar';
+import { aiVisionRouteElements } from './VisionRoutes';
 
 const RoleRoute = ({
   allow,
@@ -87,9 +89,9 @@ const RoleRoute = ({
   );
 };
 
-export const AppShell = ({ logout }: { logout: () => Promise<void> }) => {
+const AppShellInner = ({ logout }: { logout: () => Promise<void> }) => {
   const { role } = useSession();
-
+  const { isAiVisionLayer } = useAiVisionLayer();
   const defaultRoute = defaultRouteForRole(role);
 
   return (
@@ -630,6 +632,8 @@ export const AppShell = ({ logout }: { logout: () => Promise<void> }) => {
           }
         />
 
+        {isAiVisionLayer ? aiVisionRouteElements(defaultRoute) : null}
+
         <Route
           path="/dev/api-diff"
           element={
@@ -646,3 +650,9 @@ export const AppShell = ({ logout }: { logout: () => Promise<void> }) => {
     </Page>
   );
 };
+
+export const AppShell = ({ logout }: { logout: () => Promise<void> }) => (
+  <AiVisionLayerProvider>
+    <AppShellInner logout={logout} />
+  </AiVisionLayerProvider>
+);

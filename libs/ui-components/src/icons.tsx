@@ -3,10 +3,14 @@ import type { SVGIconProps } from '@patternfly/react-icons/dist/esm/createIcon';
 import BalanceScaleIcon from '@patternfly/react-icons/dist/esm/icons/balance-scale-icon';
 import BrainIcon from '@patternfly/react-icons/dist/esm/icons/brain-icon';
 import BuildingIcon from '@patternfly/react-icons/dist/esm/icons/building-icon';
+import CatalogIcon from '@patternfly/react-icons/dist/esm/icons/catalog-icon';
+import ChartLineIcon from '@patternfly/react-icons/dist/esm/icons/chart-line-icon';
 import CloudIcon from '@patternfly/react-icons/dist/esm/icons/cloud-icon';
+import CommentsIcon from '@patternfly/react-icons/dist/esm/icons/comments-icon';
 import CopyIcon from '@patternfly/react-icons/dist/esm/icons/copy-icon';
 import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
 import DatabaseIcon from '@patternfly/react-icons/dist/esm/icons/database-icon';
+import DesktopIcon from '@patternfly/react-icons/dist/esm/icons/desktop-icon';
 import FolderIcon from '@patternfly/react-icons/dist/esm/icons/folder-icon';
 import FolderPlusIcon from '@patternfly/react-icons/dist/esm/icons/folder-plus-icon';
 import GlobeIcon from '@patternfly/react-icons/dist/esm/icons/globe-icon';
@@ -18,6 +22,7 @@ import MapMarkerIcon from '@patternfly/react-icons/dist/esm/icons/map-marker-ico
 import MicrochipIcon from '@patternfly/react-icons/dist/esm/icons/microchip-icon';
 import NetworkIcon from '@patternfly/react-icons/dist/esm/icons/network-icon';
 import PencilAltIcon from '@patternfly/react-icons/dist/esm/icons/pencil-alt-icon';
+import ProjectDiagramIcon from '@patternfly/react-icons/dist/esm/icons/project-diagram-icon';
 import ServerIcon from '@patternfly/react-icons/dist/esm/icons/server-icon';
 import ShareAltIcon from '@patternfly/react-icons/dist/esm/icons/share-alt-icon';
 import TachometerAltIcon from '@patternfly/react-icons/dist/esm/icons/tachometer-alt-icon';
@@ -30,6 +35,16 @@ const SHELL_NAV_ICONS: Record<string, ComponentType<SVGIconProps>> = {
   'compute-vms': VirtualMachineIcon,
   'bare-metal': MicrochipIcon,
   'ai-models': BrainIcon,
+  workbenches: DesktopIcon,
+  pipelines: ProjectDiagramIcon,
+  'ai-asset-endpoints': CloudIcon,
+  playground: CommentsIcon,
+  'api-keys': KeyIcon,
+  'other-genai-options': CubeIcon,
+  'gpu-status': MicrochipIcon,
+  'maas-governance': BalanceScaleIcon,
+  'model-catalog-settings': CatalogIcon,
+  'ai-usage': ChartLineIcon,
   'projects-list': FolderIcon,
   'projects-new': FolderPlusIcon,
   catalog: CubeIcon,

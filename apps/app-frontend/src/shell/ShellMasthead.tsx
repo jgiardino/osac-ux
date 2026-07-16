@@ -20,6 +20,7 @@ import {
   ModalFooter,
   ModalHeader,
   PageToggleButton,
+  Switch,
   Title,
   Toolbar,
   ToolbarContent,
@@ -27,6 +28,7 @@ import {
   ToolbarItem,
 } from '@patternfly/react-core';
 import { BarsIcon } from '@patternfly/react-icons/dist/esm/icons/bars-icon';
+import BrainIcon from '@patternfly/react-icons/dist/esm/icons/brain-icon';
 import { UserIcon } from '@patternfly/react-icons/dist/esm/icons/user-icon';
 
 import UserPreferencesModal from '@osac/ui-components/components/UserPreferences/UserPreferencesModal';
@@ -34,6 +36,7 @@ import { useSession } from '@osac/ui-components/hooks/use-session';
 import type { DemoShellRole } from '@osac/ui-components/shellTypes';
 import { getErrorMessage } from '@osac/ui-components/utils/error';
 
+import { useAiVisionLayer } from './AiVisionLayerContext';
 import { operatingModeLabel } from './shellLabels';
 import { defaultRouteForRole } from './shellRoutes';
 
@@ -53,8 +56,10 @@ export const ShellMasthead = ({ onLogout }: ShellMastheadProps) => {
   const [logoutError, setLogoutError] = React.useState<string>();
   const navigate = useNavigate();
   const { role, username, isDemoMode, setRole } = useSession();
+  const { isAiVisionLayer, setAiVisionLayer } = useAiVisionLayer();
 
   const displayName = isDemoMode ? `Demo (${operatingModeLabel(role)})` : username || 'User';
+  const canUseAiVisionLayer = isDemoMode && (role === 'tenantUser' || role === 'tenantAdmin');
 
   const handleRoleSwitch = (newRole: DemoShellRole) => {
     setRole?.(newRole);
@@ -102,6 +107,24 @@ export const ShellMasthead = ({ onLogout }: ShellMastheadProps) => {
                 align={{ default: 'alignEnd' }}
                 gap={{ default: 'gapNone', md: 'gapMd' }}
               >
+                {canUseAiVisionLayer && (
+                  <ToolbarItem>
+                    <Switch
+                      id="ai-vision-layer-toggle"
+                      label="AI vision layer"
+                      isChecked={isAiVisionLayer}
+                      onChange={(_e, checked) => setAiVisionLayer(checked)}
+                      ouiaId="ai-vision-layer-toggle"
+                    />
+                  </ToolbarItem>
+                )}
+                {isDemoMode && isAiVisionLayer && canUseAiVisionLayer && (
+                  <ToolbarItem>
+                    <Label color="purple" icon={<BrainIcon />} isCompact>
+                      AI vision
+                    </Label>
+                  </ToolbarItem>
+                )}
                 <ToolbarItem>
                   <Dropdown
                     isOpen={isUserMenuOpen}
