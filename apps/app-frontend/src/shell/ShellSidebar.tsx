@@ -1,24 +1,16 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  Flex,
-  FlexItem,
-  Label,
-  Nav,
-  NavGroup,
-  NavItem,
-  PageSidebar,
-  PageSidebarBody,
-} from '@patternfly/react-core';
-import BrainIcon from '@patternfly/react-icons/dist/esm/icons/brain-icon';
+import { Label, Nav, NavGroup, NavItem, PageSidebar, PageSidebarBody } from '@patternfly/react-core';
 
 import { useSession } from '@osac/ui-components/hooks/use-session';
 import { useTranslation } from '@osac/ui-components/hooks/useTranslation';
 import { shellNavIcon } from '@osac/ui-components/icons';
 
 import { useAiVisionLayer } from './AiVisionLayerContext';
+import { aiVisionNavIcon } from './AiVisionNavIcons';
 import { type NavLink, navRowsForRole } from './shellNav';
-import { isAiVisionNavItem, mergeAiVisionNav } from './visionNav';
+import { isAiVisionNavItem, mergeAiVisionNav } from './shellNavAiVision';
+import { RhUiAiExperienceIcon } from '../assets/ai-vision-icons/AiVisionIcons';
 
 const ShellNavItem = ({ item }: { item: NavLink }) => {
   const location = useLocation();
@@ -28,7 +20,7 @@ const ShellNavItem = ({ item }: { item: NavLink }) => {
   return (
     <NavItem
       itemId={item.id}
-      icon={shellNavIcon(item.id)}
+      icon={aiVisionNavIcon(item.id) ?? shellNavIcon(item.id)}
       isActive={location.pathname === item.path}
       to={item.path}
       onClick={(e) => {
@@ -36,22 +28,15 @@ const ShellNavItem = ({ item }: { item: NavLink }) => {
         navigate(item.path);
       }}
     >
+      {item.label}
       {showAiLabel ? (
-        <Flex
-          spaceItems={{ default: 'spaceItemsSm' }}
-          alignItems={{ default: 'alignItemsCenter' }}
-          flexWrap={{ default: 'nowrap' }}
-        >
-          <FlexItem>{item.label}</FlexItem>
-          <FlexItem>
-            <Label isCompact color="purple" icon={<BrainIcon />}>
-              AI
-            </Label>
-          </FlexItem>
-        </Flex>
-      ) : (
-        item.label
-      )}
+        <>
+          {' '}
+          <Label isCompact color="purple" variant="outline" icon={<RhUiAiExperienceIcon />}>
+            AI
+          </Label>
+        </>
+      ) : null}
     </NavItem>
   );
 };

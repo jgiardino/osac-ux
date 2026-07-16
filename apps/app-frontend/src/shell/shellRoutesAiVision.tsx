@@ -8,7 +8,7 @@ import type { DemoShellRole } from '@osac/ui-components/shellTypes';
 
 import { useAiVisionLayer } from './AiVisionLayerContext';
 
-const VisionRoleRoute = ({
+const AiVisionRoleRoute = ({
   allow,
   fallback,
   children,
@@ -26,119 +26,108 @@ const VisionRoleRoute = ({
 };
 
 /**
- * Returns Route elements for the AI vision layer.
+ * Additive twin of shellRoutes.ts — Route elements for the AI vision layer.
  * Must be inlined under <Routes> (React Router ignores Route trees inside custom components).
  */
-export const aiVisionRouteElements = (defaultRoute: string) => (
+export const shellRoutesAiVision = (defaultRoute: string) => (
   <>
     <Route
       path="/workbenches"
       element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
           <PlaceholderPage
             title="Workbenches"
             lede="Open and manage notebook environments launched from GPU Notebook SKUs."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/pipelines"
       element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
           <PlaceholderPage
             title="Pipelines"
             lede="Track training and fine-tuning jobs launched from training cluster SKUs."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/genai/endpoints"
       element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
           <PlaceholderPage
             title="AI asset endpoints"
             lede="View deployed AI models and gateway endpoints your organization has made available. Copy endpoint URLs for applications."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/genai/playground"
       element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
           <PlaceholderPage
             title="Playground"
             lede="Send test prompts to an entitled endpoint before building your application."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/genai/api-keys"
       element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
           <PlaceholderPage
             title="API keys"
             lede="Create and manage API keys; see subscriptions and auth policies available to you."
           />
-        </VisionRoleRoute>
-      }
-    />
-    <Route
-      path="/genai/other"
-      element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="Other GenAI options"
-            lede="Additional GenAI studio capabilities (for example RAG assistants and prompt tools) as they become available in the OSAC tenant shell."
-          />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/resources/gpu-status"
       element={
-        <VisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
           <PlaceholderPage
             title="GPU status"
             lede="View GPU utilization and allocation for your hands-on workloads."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/admin/ai/maas-governance"
       element={
-        <VisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
           <PlaceholderPage
             title="MaaS governance"
             lede="Manage which AI gateway endpoints are available to developers. Assign policies, subscriptions, and access groups."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/admin/ai/model-catalog-settings"
       element={
-        <VisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
           <PlaceholderPage
             title="Model catalog settings"
             lede="Configure sources of models available for tenant users to customize and deploy (base model library — not AI asset endpoints). In the current prototype, SKU and catalog authoring may still live under provider Catalog Studio."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
     <Route
       path="/admin/ai/usage"
       element={
-        <VisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
           <PlaceholderPage
             title="Usage"
             lede="View AI consumption across your organization — gateway tokens and GPU attribution by team or project."
           />
-        </VisionRoleRoute>
+        </AiVisionRoleRoute>
       }
     />
   </>

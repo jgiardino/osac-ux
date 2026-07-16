@@ -66,11 +66,11 @@ import { VmDetailsPage } from '@osac/ui-components/pages/tenant/VmDetailsPage';
 import { VmListPage } from '@osac/ui-components/pages/tenant/VmListPage';
 import type { DemoShellRole } from '@osac/ui-components/shellTypes';
 
-import { AiVisionLayerProvider, useAiVisionLayer } from './AiVisionLayerContext';
+import { AiVisionLayerProvider } from './AiVisionLayerContext';
 import { ShellMasthead } from './ShellMasthead';
 import { defaultRouteForRole } from './shellRoutes';
+import { shellRoutesAiVision } from './shellRoutesAiVision';
 import { ShellSidebar } from './ShellSidebar';
-import { aiVisionRouteElements } from './VisionRoutes';
 
 const RoleRoute = ({
   allow,
@@ -91,7 +91,6 @@ const RoleRoute = ({
 
 const AppShellInner = ({ logout }: { logout: () => Promise<void> }) => {
   const { role } = useSession();
-  const { isAiVisionLayer } = useAiVisionLayer();
   const defaultRoute = defaultRouteForRole(role);
 
   return (
@@ -632,7 +631,8 @@ const AppShellInner = ({ logout }: { logout: () => Promise<void> }) => {
           }
         />
 
-        {isAiVisionLayer ? aiVisionRouteElements(defaultRoute) : null}
+        {/* Always registered; AiVisionRoleRoute gates on the AI vision layer flag. */}
+        {shellRoutesAiVision(defaultRoute)}
 
         <Route
           path="/dev/api-diff"

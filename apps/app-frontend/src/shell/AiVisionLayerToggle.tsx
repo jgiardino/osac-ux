@@ -1,7 +1,7 @@
 import { Label, Switch, ToolbarItem } from '@patternfly/react-core';
-import BrainIcon from '@patternfly/react-icons/dist/esm/icons/brain-icon';
 
 import { useAiVisionLayer } from './AiVisionLayerContext';
+import { RhUiAiExperienceIcon } from '../assets/ai-vision-icons/AiVisionIcons';
 
 /** Demo-only masthead control for the AI vision nav/routes overlay. */
 export const AiVisionLayerToggle = () => {
@@ -11,7 +11,7 @@ export const AiVisionLayerToggle = () => {
     <>
       {isAiVisionLayer && (
         <ToolbarItem>
-          <Label color="purple" icon={<BrainIcon />}>
+          <Label color="purple" icon={<RhUiAiExperienceIcon />}>
             AI vision
           </Label>
         </ToolbarItem>

@@ -1,5 +1,6 @@
 /**
- * Additive AI vision nav overlays. Merges onto baseline shellNav without rewriting it.
+ * Additive twin of shellNav.ts for the AI vision layer.
+ * Merges onto baseline shellNav without rewriting it.
  */
 import type { TFunction } from 'i18next';
 
@@ -14,7 +15,6 @@ export const AI_VISION_NAV_IDS = new Set([
   'ai-asset-endpoints',
   'playground',
   'api-keys',
-  'other-genai-options',
   'gpu-status',
   'maas-governance',
   'model-catalog-settings',
@@ -56,7 +56,6 @@ const mergeTenantUserVisionNav = (rows: NavRow[], t: TFunction): NavRow[] => {
       { id: 'ai-asset-endpoints', label: t('AI asset endpoints'), path: '/genai/endpoints' },
       { id: 'playground', label: t('Playground'), path: '/genai/playground' },
       { id: 'api-keys', label: t('API keys'), path: '/genai/api-keys' },
-      { id: 'other-genai-options', label: t('Other GenAI options'), path: '/genai/other' },
     ],
   });
 
