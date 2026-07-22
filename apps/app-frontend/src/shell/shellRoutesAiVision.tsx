@@ -7,6 +7,11 @@ import { PlaceholderPage } from '@osac/ui-components/PlaceholderPage';
 import type { DemoShellRole } from '@osac/ui-components/shellTypes';
 
 import { useAiVisionLayer } from './AiVisionLayerContext';
+import {
+  ApiKeyDetailsPage,
+  ApiKeysPage,
+  SubscriptionDetailsPage,
+} from '../pages/genai/api-keys';
 
 const AiVisionRoleRoute = ({
   allow,
@@ -79,10 +84,23 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/genai/api-keys"
       element={
         <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="API keys"
-            lede="Create and manage API keys; see subscriptions and auth policies available to you."
-          />
+          <ApiKeysPage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/genai/api-keys/:keyId"
+      element={
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+          <ApiKeyDetailsPage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/genai/subscriptions/:subscriptionId/:tab?"
+      element={
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+          <SubscriptionDetailsPage />
         </AiVisionRoleRoute>
       }
     />
