@@ -13,6 +13,7 @@ export const AI_VISION_NAV_IDS = new Set([
   'workbenches',
   'pipelines',
   'ai-asset-endpoints',
+  'ai-asset-endpoints-prod',
   'playground',
   'api-keys',
   'gpu-status',
@@ -53,7 +54,16 @@ const mergeTenantUserVisionNav = (rows: NavRow[], t: TFunction): NavRow[] => {
     sectionId: 'nav-tenant-genai-studio',
     label: t('GenAI studio'),
     children: [
-      { id: 'ai-asset-endpoints', label: t('AI asset endpoints'), path: '/genai/endpoints' },
+      {
+        id: 'ai-asset-endpoints',
+        label: t('AI asset endpoints (UXD)'),
+        path: '/genai/endpoints',
+      },
+      {
+        id: 'ai-asset-endpoints-prod',
+        label: t('AI asset endpoints (prod)'),
+        path: '/genai/endpoints-prod',
+      },
       { id: 'playground', label: t('Playground'), path: '/genai/playground' },
       { id: 'api-keys', label: t('API keys'), path: '/genai/api-keys' },
     ],

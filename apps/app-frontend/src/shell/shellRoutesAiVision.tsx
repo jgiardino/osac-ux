@@ -12,6 +12,8 @@ import {
   ApiKeysPage,
   SubscriptionDetailsPage,
 } from '../pages/genai/api-keys';
+import { AiAssetEndpointsPage } from '../pages/genai/asset-endpoints';
+import { AiAssetEndpointsProdPage } from '../pages/genai/asset-endpoints-prod';
 
 const AiVisionRoleRoute = ({
   allow,
@@ -62,10 +64,15 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/genai/endpoints"
       element={
         <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="AI asset endpoints"
-            lede="View deployed AI models and gateway endpoints your organization has made available. Copy endpoint URLs for applications."
-          />
+          <AiAssetEndpointsPage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/genai/endpoints-prod"
+      element={
+        <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
+          <AiAssetEndpointsProdPage />
         </AiVisionRoleRoute>
       }
     />

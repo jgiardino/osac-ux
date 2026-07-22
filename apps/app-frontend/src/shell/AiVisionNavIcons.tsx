@@ -21,6 +21,7 @@ const AI_VISION_NAV_ICONS: Record<string, ComponentType<SVGIconProps>> = {
   workbenches: RhUiBuildIcon,
   pipelines: RhUiPathIcon,
   'ai-asset-endpoints': RhUiLocationPinIcon,
+  'ai-asset-endpoints-prod': RhUiLocationPinIcon,
   playground: RhUiAiEditIcon,
   'api-keys': RhUiKeyIcon,
   'gpu-status': MicrochipIcon,
