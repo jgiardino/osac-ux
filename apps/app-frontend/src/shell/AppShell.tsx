@@ -98,6 +98,7 @@ const AppShellInner = ({ logout }: { logout: () => Promise<void> }) => {
       masthead={<ShellMasthead onLogout={logout} />}
       sidebar={<ShellSidebar />}
       isManagedSidebar
+      isContentFilled
     >
       <Routes>
         <Route

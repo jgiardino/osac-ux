@@ -55,13 +55,8 @@ const mergeTenantUserVisionNav = (rows: NavRow[], t: TFunction): NavRow[] => {
     label: t('GenAI studio'),
     children: [
       {
-        id: 'ai-asset-endpoints',
-        label: t('AI asset endpoints (UXD)'),
-        path: '/genai/endpoints',
-      },
-      {
         id: 'ai-asset-endpoints-prod',
-        label: t('AI asset endpoints (prod)'),
+        label: t('AI asset endpoints'),
         path: '/genai/endpoints-prod',
       },
       { id: 'playground', label: t('Playground'), path: '/genai/playground' },

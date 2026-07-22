@@ -14,6 +14,7 @@ import {
 } from '../pages/genai/api-keys';
 import { AiAssetEndpointsPage } from '../pages/genai/asset-endpoints';
 import { AiAssetEndpointsProdPage } from '../pages/genai/asset-endpoints-prod';
+import { PlaygroundPage } from '../pages/genai/playground';
 
 const AiVisionRoleRoute = ({
   allow,
@@ -80,10 +81,7 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/genai/playground"
       element={
         <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="Playground"
-            lede="Send test prompts to an entitled endpoint before building your application."
-          />
+          <PlaygroundPage />
         </AiVisionRoleRoute>
       }
     />
