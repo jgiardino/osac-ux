@@ -15,6 +15,8 @@ import {
 import { AiAssetEndpointsPage } from '../pages/genai/asset-endpoints';
 import { AiAssetEndpointsProdPage } from '../pages/genai/asset-endpoints-prod';
 import { PlaygroundPage } from '../pages/genai/playground';
+import { PipelinesPage } from '../pages/pipelines';
+import { WorkbenchesPage } from '../pages/workbenches';
 
 const AiVisionRoleRoute = ({
   allow,
@@ -43,10 +45,7 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/workbenches"
       element={
         <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="Workbenches"
-            lede="Open and manage notebook environments launched from GPU Notebook SKUs."
-          />
+          <WorkbenchesPage />
         </AiVisionRoleRoute>
       }
     />
@@ -54,10 +53,7 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/pipelines"
       element={
         <AiVisionRoleRoute allow={['tenantUser']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="Pipelines"
-            lede="Track training and fine-tuning jobs launched from training cluster SKUs."
-          />
+          <PipelinesPage />
         </AiVisionRoleRoute>
       }
     />

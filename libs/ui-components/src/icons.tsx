@@ -79,6 +79,8 @@ export const CatalogItemIcon = ({ kind }: CatalogItemIconProps) => {
         ? CloudIcon
         : kind === 'maas'
           ? BrainIcon
-          : VirtualMachineIcon;
+          : kind === 'workbench'
+            ? CubeIcon
+            : VirtualMachineIcon;
   return <Icon aria-hidden className="pf-v6-u-font-size-lg" />;
 };

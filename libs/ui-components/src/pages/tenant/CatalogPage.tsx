@@ -59,12 +59,13 @@ import {
 } from '@osac/ui-components/components/catalog/catalogItemDisplay';
 import { CatalogItemListSection } from '@osac/ui-components/components/catalog/CatalogItemListSection';
 import { TenantTemplateCustomizeModal } from '@osac/ui-components/components/catalog/TenantTemplateCustomizeModal';
+import { WORKBENCH_CATALOG_ITEMS } from '@osac/ui-components/components/catalog/workbenchCatalogMocks';
 import ListPage from '@osac/ui-components/components/Page/ListPage';
 import ListPageBody from '@osac/ui-components/components/Page/ListPageBody';
 import { useSession } from '@osac/ui-components/hooks/use-session';
 import { useTranslation } from '@osac/ui-components/hooks/useTranslation';
 
-type CatalogTypeFilter = 'all' | 'vm' | 'cluster' | 'baremetal' | 'maas';
+type CatalogTypeFilter = 'all' | 'vm' | 'cluster' | 'baremetal' | 'maas' | 'workbench';
 
 interface SelectedCatalogItem {
   kind: CatalogItemKind;
@@ -104,6 +105,7 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
         { value: 'cluster' as const, label: t('Clusters') },
         { value: 'baremetal' as const, label: t('Bare metal') },
         { value: 'maas' as const, label: t('AI Models') },
+        { value: 'workbench' as const, label: t('Workbenches') },
       ] satisfies ReadonlyArray<{ value: CatalogTypeFilter; label: string }>,
     [t],
   );
@@ -242,7 +244,8 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
   const showClusterCatalog = typeFilter === 'all' || typeFilter === 'cluster';
   const showBmCatalog = typeFilter === 'all' || typeFilter === 'baremetal';
   const showMaasCatalog = typeFilter === 'all' || typeFilter === 'maas';
-  const usePageLevelQueryState = typeFilter !== 'all';
+  const showWorkbenchCatalog = typeFilter === 'all' || typeFilter === 'workbench';
+  const usePageLevelQueryState = typeFilter !== 'all' && typeFilter !== 'workbench';
 
   // Client-side label filter covers demo mode (server-side covers production)
   const labelFilters = useMemo(
@@ -294,6 +297,16 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
         : [],
     [showMaasCatalog, search, maasCatalogItems, labelFilters],
   );
+  const filteredWorkbenchItems = useMemo(
+    () =>
+      showWorkbenchCatalog
+        ? filterCatalogItemsByLabels(
+            filterCatalogItemsBySearch(WORKBENCH_CATALOG_ITEMS, search),
+            labelFilters,
+          )
+        : [],
+    [showWorkbenchCatalog, search, labelFilters],
+  );
 
   const isLoading =
     usePageLevelQueryState &&
@@ -314,14 +327,16 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
     filteredVmItems.length > 0 ||
     filteredClusterItems.length > 0 ||
     filteredBmItems.length > 0 ||
-    filteredMaasItems.length > 0;
+    filteredMaasItems.length > 0 ||
+    filteredWorkbenchItems.length > 0;
   const searchTerm = search.trim();
   const hasActiveFilters = Boolean(osFilter || archFilter || workloadFilter || searchTerm);
   const hasVisibleSections =
     (showVmCatalog && (vmLoading || vmError || filteredVmItems.length > 0)) ||
     (showClusterCatalog && (clusterLoading || clusterError || filteredClusterItems.length > 0)) ||
     (showBmCatalog && (bmLoading || bmError || filteredBmItems.length > 0)) ||
-    (showMaasCatalog && (maasLoading || maasError || filteredMaasItems.length > 0));
+    (showMaasCatalog && (maasLoading || maasError || filteredMaasItems.length > 0)) ||
+    (showWorkbenchCatalog && filteredWorkbenchItems.length > 0);
   const showEmptyState = usePageLevelQueryState
     ? !hasCatalogItems
     : !hasVisibleSections && !vmLoading && !clusterLoading && !bmLoading && !maasLoading;
@@ -355,6 +370,13 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
       return (
         <Label isCompact color="teal">
           AI Model
+        </Label>
+      );
+    }
+    if (kind === 'workbench') {
+      return (
+        <Label isCompact color="green">
+          Workbench
         </Label>
       );
     }
@@ -470,6 +492,10 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
                   onClick={() => navigate(`/models/create/${selectedCatalogItem.item.id}`)}
                 >
                   {t('Request model access')}
+                </Button>
+              ) : selectedCatalogItem?.kind === 'workbench' ? (
+                <Button variant="primary" isAriaDisabled>
+                  {t('Create workbench')}
                 </Button>
               ) : null
             }
@@ -711,6 +737,25 @@ export const CatalogPage = ({ isProviderGlobal = false, isAdminMode = false }: P
                         ? navigate(`/provider/catalog/${item.id}/edit?kind=maas`)
                         : setSelectedCatalogItem({ kind: 'maas', item })
                     }
+                  />
+                  <CatalogItemListSection
+                    title={t('Workbenches')}
+                    kind="workbench"
+                    items={filteredWorkbenchItems}
+                    isLoading={false}
+                    error={null}
+                    selectedItemId={
+                      isProviderGlobal
+                        ? null
+                        : selectedCatalogItem?.kind === 'workbench'
+                          ? selectedCatalogItem.item.id
+                          : null
+                    }
+                    onSelectItem={(item) => {
+                      if (!isProviderGlobal) {
+                        setSelectedCatalogItem({ kind: 'workbench', item });
+                      }
+                    }}
                   />
                 </>
               )}

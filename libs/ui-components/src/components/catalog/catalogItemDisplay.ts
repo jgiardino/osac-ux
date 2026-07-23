@@ -50,9 +50,12 @@ export const catalogItemIsAllowed = (item: CatalogItemForDisplay, tenantId: stri
   return list.includes(tenantId);
 };
 
-export type CatalogItemKind = 'vm' | 'cluster' | 'baremetal' | 'maas';
+export type CatalogItemKind = 'vm' | 'cluster' | 'baremetal' | 'maas' | 'workbench';
 
 export const inferCatalogItemKind = (item: CatalogItemForDisplay): CatalogItemKind => {
+  if (item.metadata?.labels?.kind === 'workbench') {
+    return 'workbench';
+  }
   if (
     catalogItemFieldDefinitions(item).some((def) => isClusterCatalogItemResourceFieldPath(def.path))
   ) {

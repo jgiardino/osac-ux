@@ -1,22 +1,31 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
-  Checkbox,
   ClipboardCopy,
   Label,
+  MenuToggle,
   Popover,
   SearchInput,
+  Select,
+  SelectList,
+  SelectOption,
   Toolbar,
   ToolbarContent,
+  ToolbarGroup,
   ToolbarItem,
   Truncate,
 } from '@patternfly/react-core';
+import FilterIcon from '@patternfly/react-icons/dist/esm/icons/filter-icon';
+import PlayIcon from '@patternfly/react-icons/dist/esm/icons/play-icon';
 import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 
 import { useTranslation } from '@osac/ui-components/hooks/useTranslation';
 
 import { MOCK_MCP_SERVERS } from './mocks';
 import type { MCPServer } from './types';
+
+type FilterType = 'name' | 'keyword' | 'description';
 
 const statusLabel = (status: MCPServer['status']) => {
   switch (status) {
@@ -43,18 +52,51 @@ const statusLabel = (status: MCPServer['status']) => {
 
 const MCPTab = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [filterType, setFilterType] = useState<FilterType>('name');
+  const [filterTypeOpen, setFilterTypeOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  const filtered = MOCK_MCP_SERVERS.filter((server) => {
-    if (!search) {
-      return true;
+  const filterTypeLabel = (key: FilterType) => {
+    switch (key) {
+      case 'keyword':
+        return t('Keyword');
+      case 'description':
+        return t('Description');
+      default:
+        return t('Name');
     }
-    const q = search.toLowerCase();
-    return (
-      server.name.toLowerCase().includes(q) || server.description.toLowerCase().includes(q)
-    );
-  });
+  };
+
+  const filterPlaceholder = (key: FilterType) => {
+    switch (key) {
+      case 'keyword':
+        return t('Filter by keyword...');
+      case 'description':
+        return t('Filter by description...');
+      default:
+        return t('Filter by name...');
+    }
+  };
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) {
+      return MOCK_MCP_SERVERS;
+    }
+    return MOCK_MCP_SERVERS.filter((server) => {
+      if (filterType === 'description') {
+        return server.description.toLowerCase().includes(q);
+      }
+      if (filterType === 'keyword') {
+        return (
+          server.name.toLowerCase().includes(q) || server.description.toLowerCase().includes(q)
+        );
+      }
+      return server.name.toLowerCase().includes(q);
+    });
+  }, [filterType, search]);
 
   const toggle = (id: string) => {
     setSelected((prev) => {
@@ -72,46 +114,107 @@ const MCPTab = () => {
     <>
       <Toolbar id="aae-prod-mcp-toolbar">
         <ToolbarContent>
-          <ToolbarItem>
-            <SearchInput
-              placeholder={t('Filter by name')}
-              value={search}
-              onChange={(_e, value) => setSearch(value)}
-              onClear={() => setSearch('')}
-              aria-label={t('Filter MCP servers')}
-              id="aae-prod-mcp-search"
-            />
-          </ToolbarItem>
-          {selected.size > 0 ? (
+          <ToolbarGroup variant="filter-group">
             <ToolbarItem>
-              <Button variant="secondary" isDisabled id="aae-prod-mcp-try-playground">
-                {t('Try in playground')} ({selected.size})
+              <Select
+                isOpen={filterTypeOpen}
+                onOpenChange={setFilterTypeOpen}
+                selected={filterType}
+                onSelect={(_e, value) => {
+                  if (value === 'name' || value === 'keyword' || value === 'description') {
+                    setFilterType(value as FilterType);
+                    setSearch('');
+                  }
+                  setFilterTypeOpen(false);
+                }}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setFilterTypeOpen(!filterTypeOpen)}
+                    isExpanded={filterTypeOpen}
+                    icon={<FilterIcon />}
+                    aria-label={t('Filter toggle')}
+                  >
+                    {filterTypeLabel(filterType)}
+                  </MenuToggle>
+                )}
+              >
+                <SelectList>
+                  {(['name', 'keyword', 'description'] as const).map((key) => (
+                    <SelectOption key={key} value={key}>
+                      {filterTypeLabel(key)}
+                    </SelectOption>
+                  ))}
+                </SelectList>
+              </Select>
+            </ToolbarItem>
+            <ToolbarItem>
+              <SearchInput
+                placeholder={filterPlaceholder(filterType)}
+                value={search}
+                onChange={(_e, value) => setSearch(value)}
+                onClear={() => setSearch('')}
+                aria-label={t('Filter MCP servers')}
+                id="aae-prod-mcp-search"
+              />
+            </ToolbarItem>
+          </ToolbarGroup>
+          <ToolbarGroup variant="action-group">
+            <ToolbarItem>
+              <Button
+                variant="primary"
+                icon={<PlayIcon />}
+                isDisabled={selected.size === 0}
+                onClick={() => navigate('/genai/playground')}
+                id="aae-prod-mcp-try-playground"
+              >
+                {selected.size > 0
+                  ? `${t('Try in Playground')} (${selected.size})`
+                  : t('Try in Playground')}
               </Button>
             </ToolbarItem>
-          ) : null}
+          </ToolbarGroup>
         </ToolbarContent>
       </Toolbar>
 
       <Table aria-label={t('MCP servers')} variant="compact" id="aae-prod-mcp-table">
         <Thead>
           <Tr>
-            <Th screenReaderText={t('Select')} />
+            <Th
+              select={{
+                onSelect: (_e, isSelecting) => {
+                  setSelected((prev) => {
+                    const next = new Set(prev);
+                    filtered.forEach((server) => {
+                      if (isSelecting) {
+                        next.add(server.id);
+                      } else {
+                        next.delete(server.id);
+                      }
+                    });
+                    return next;
+                  });
+                },
+                isSelected:
+                  filtered.length > 0 && filtered.every((server) => selected.has(server.id)),
+              }}
+              aria-label={t('Select')}
+            />
             <Th>{t('Name')}</Th>
             <Th>{t('Status')}</Th>
             <Th>{t('Endpoint')}</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {filtered.map((server) => (
+          {filtered.map((server, rowIndex) => (
             <Tr key={server.id}>
-              <Td>
-                <Checkbox
-                  id={`aae-prod-mcp-select-${server.id}`}
-                  isChecked={selected.has(server.id)}
-                  onChange={() => toggle(server.id)}
-                  aria-label={t('Select {{name}}', { name: server.name })}
-                />
-              </Td>
+              <Td
+                select={{
+                  rowIndex,
+                  onSelect: () => toggle(server.id),
+                  isSelected: selected.has(server.id),
+                }}
+              />
               <Td dataLabel={t('Name')}>
                 <div>
                   <strong>
