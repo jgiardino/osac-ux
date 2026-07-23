@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useHref, useLocation, useNavigate } from 'react-router-dom';
 import { Label, Nav, NavGroup, NavItem, PageSidebar, PageSidebarBody } from '@patternfly/react-core';
 
 import { useSession } from '@osac/ui-components/hooks/use-session';
@@ -21,6 +21,8 @@ const ShellNavItem = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  // Include Vite/GitHub Pages basename so open-in-new-tab / bookmark hrefs are correct.
+  const href = useHref(item.path);
   const showAiLabel = isAiVisionLayer && isAiVisionNavItem(item.id);
   const icon =
     (isAiVisionLayer ? aiVisionNavIcon(item.id) : undefined) ?? shellNavIcon(item.id);
@@ -30,7 +32,7 @@ const ShellNavItem = ({
       itemId={item.id}
       icon={icon}
       isActive={location.pathname === item.path}
-      to={item.path}
+      to={href}
       onClick={(e) => {
         e.preventDefault();
         navigate(item.path);

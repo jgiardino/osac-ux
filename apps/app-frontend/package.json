@@ -9,6 +9,8 @@
     "build:demo": "VITE_DEMO_MODE=true vite build",
     "build": "tsc -b tsconfig.build.json && vite build",
     "preview": "vite preview",
+    "preview:demo": "pnpm run build:demo && vite preview",
+    "preview:pages": "pnpm run build:demo && node scripts/preview-github-pages.mjs",
     "test": "vitest run"
   },
   "dependencies": {
