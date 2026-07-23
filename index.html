@@ -5,7 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OSAC</title>
-    <script type="module" crossorigin src="/osac-ux/assets/index-78-NaoaT.js"></script>
+    <!-- Restore path after GitHub Pages 404.html redirect (spa-github-pages). -->
+    <script>
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&');
+            })
+            .join('?');
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
+        }
+      })(window.location);
+    </script>
+    <script type="module" crossorigin src="/osac-ux/assets/index-fgA9SFLk.js"></script>
     <link rel="modulepreload" crossorigin href="/osac-ux/assets/chunk-BEqpzyXh.js">
     <link rel="stylesheet" crossorigin href="/osac-ux/assets/index-Cc7Ohj92.css">
   </head>
@@ -13,3 +32,4 @@
     <div id="root"></div>
   </body>
 </html>
+

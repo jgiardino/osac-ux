@@ -2,14 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OSAC</title>
-    <script type="module" crossorigin src="/osac-ux/assets/index-78-NaoaT.js"></script>
-    <link rel="modulepreload" crossorigin href="/osac-ux/assets/chunk-BEqpzyXh.js">
-    <link rel="stylesheet" crossorigin href="/osac-ux/assets/index-Cc7Ohj92.css">
+    <script>
+      // Single Page Apps for GitHub Pages (project site: /osac-ux/…)
+      // https://github.com/rafgraph/spa-github-pages
+      (function () {
+        var pathSegmentsToKeep = 1;
+        var l = window.location;
+        l.replace(
+          l.protocol +
+            '//' +
+            l.hostname +
+            (l.port ? ':' + l.port : '') +
+            l.pathname
+              .split('/')
+              .slice(0, 1 + pathSegmentsToKeep)
+              .join('/') +
+            '/?/' +
+            l.pathname
+              .slice(1)
+              .split('/')
+              .slice(pathSegmentsToKeep)
+              .join('/')
+              .replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash,
+        );
+      })();
+    </script>
   </head>
-  <body>
-    <div id="root"></div>
-  </body>
+  <body></body>
 </html>
