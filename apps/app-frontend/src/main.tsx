@@ -20,6 +20,8 @@ import './global.css';
 
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
 const apiFetch = DEMO_MODE ? demoFetch : fulfillmentFetch;
+/** Vite `base` (e.g. `/osac-ux/` on GitHub Pages); BrowserRouter basename has no trailing slash. */
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,7 +48,7 @@ if (rootElement) {
     <React.StrictMode>
       <ApiProvider fetch={apiFetch}>
         <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
+          <BrowserRouter basename={routerBasename === '/' ? undefined : routerBasename}>
             <App />
           </BrowserRouter>
         </QueryClientProvider>

@@ -27,6 +27,10 @@ jobs:
       - name: Build demo
         run: pnpm --filter @osac/app-frontend run build:demo
 
+      # GitHub Pages has no server rewrite; serve the SPA for deep links / refresh.
+      - name: SPA fallback for GitHub Pages
+        run: cp apps/app-frontend/dist/index.html apps/app-frontend/dist/404.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
