@@ -14,18 +14,21 @@ import { RhUiAiExperienceIcon } from '../assets/ai-vision-icons/AiVisionIcons';
 
 const ShellNavItem = ({
   item,
-  showAiLabel,
+  isAiVisionLayer,
 }: {
   item: NavLink;
-  showAiLabel: boolean;
+  isAiVisionLayer: boolean;
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const showAiLabel = isAiVisionLayer && isAiVisionNavItem(item.id);
+  const icon =
+    (isAiVisionLayer ? aiVisionNavIcon(item.id) : undefined) ?? shellNavIcon(item.id);
 
   return (
     <NavItem
       itemId={item.id}
-      icon={aiVisionNavIcon(item.id) ?? shellNavIcon(item.id)}
+      icon={icon}
       isActive={location.pathname === item.path}
       to={item.path}
       onClick={(e) => {
@@ -66,7 +69,7 @@ export const ShellSidebar = () => {
                 <ShellNavItem
                   key={item.id}
                   item={item}
-                  showAiLabel={isAiVisionLayer && isAiVisionNavItem(item.id)}
+                  isAiVisionLayer={isAiVisionLayer}
                 />
               ))}
             </NavGroup>
