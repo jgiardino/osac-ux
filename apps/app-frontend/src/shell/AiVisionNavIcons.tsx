@@ -11,6 +11,7 @@ import MicrochipIcon from '@patternfly/react-icons/dist/esm/icons/microchip-icon
 
 import {
   RhUiAiEditIcon,
+  RhUiAiModelIcon,
   RhUiBuildIcon,
   RhUiKeyIcon,
   RhUiLocationPinIcon,
@@ -20,6 +21,7 @@ import {
 const AI_VISION_NAV_ICONS: Record<string, ComponentType<SVGIconProps>> = {
   workbenches: RhUiBuildIcon,
   pipelines: RhUiPathIcon,
+  'ai-models': RhUiAiModelIcon,
   'ai-asset-endpoints': RhUiLocationPinIcon,
   'ai-asset-endpoints-prod': RhUiLocationPinIcon,
   playground: RhUiAiEditIcon,
@@ -27,6 +29,7 @@ const AI_VISION_NAV_ICONS: Record<string, ComponentType<SVGIconProps>> = {
   'gpu-status': MicrochipIcon,
   'maas-governance': BalanceScaleIcon,
   'model-catalog-settings': CatalogIcon,
+  'admin-api-keys': RhUiKeyIcon,
   'ai-usage': ChartLineIcon,
 };
 

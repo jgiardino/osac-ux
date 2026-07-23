@@ -33,14 +33,14 @@ import { findDynamicKey } from './apiKeysStoreV34';
 import { getApiKeyByIdV34 } from './mockDataV34';
 import { useDocumentTitle, useUserProfile } from './stubs';
 import type { ApiKeyStatusV34 } from './typesV34';
+import { useApiKeysPaths } from './useApiKeysPaths';
 
 type CodeLanguage = 'curl' | 'python' | 'javascript';
-
-const API_KEYS_LIST_PATH = '/genai/api-keys';
 
 const APIKeyDetailsV34: React.FunctionComponent = () => {
   const { keyId } = useParams<{ keyId: string }>();
   const { userProfile } = useUserProfile();
+  const { listPath } = useApiKeysPaths();
   const isAdmin = userProfile === 'AI Admin';
 
   useDocumentTitle('API Key Details');
@@ -109,7 +109,7 @@ const APIKeyDetailsV34: React.FunctionComponent = () => {
   if (!apiKey) {
     return (
       <ResourceDetailsPageError
-        parentTo={API_KEYS_LIST_PATH}
+        parentTo={listPath}
         parentLabel="API keys"
         resourceLabel="API key"
         variant="not-found"
@@ -207,7 +207,7 @@ const APIKeyDetailsV34: React.FunctionComponent = () => {
       <Stack hasGutter>
         <StackItem>
           <ResourceDetailHeader
-            parentTo={API_KEYS_LIST_PATH}
+            parentTo={listPath}
             parentLabel="API keys"
             resourceName={apiKey.name}
             titleAddon={getStatusLabel(apiKey.status)}

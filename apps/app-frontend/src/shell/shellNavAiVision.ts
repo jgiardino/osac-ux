@@ -12,6 +12,7 @@ import type { NavLink, NavRow } from './shellNav';
 export const AI_VISION_NAV_IDS = new Set([
   'workbenches',
   'pipelines',
+  'ai-models',
   'ai-asset-endpoints',
   'ai-asset-endpoints-prod',
   'playground',
@@ -19,6 +20,7 @@ export const AI_VISION_NAV_IDS = new Set([
   'gpu-status',
   'maas-governance',
   'model-catalog-settings',
+  'admin-api-keys',
   'ai-usage',
 ]);
 
@@ -83,6 +85,7 @@ const mergeTenantAdminVisionNav = (rows: NavRow[], t: TFunction): NavRow[] =>
         label: t('Model catalog settings'),
         path: '/admin/ai/model-catalog-settings',
       },
+      { id: 'admin-api-keys', label: t('API keys'), path: '/admin/ai/api-keys' },
       { id: 'ai-usage', label: t('Usage'), path: '/admin/ai/usage' },
     ],
   });

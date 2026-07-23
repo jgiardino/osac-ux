@@ -31,6 +31,7 @@ import { ExpandableRowContent, Table, Tbody, Td, Th, Thead, Tr } from '@patternf
 import { mockApiKeysEngineerV34 } from '../mockDataV34';
 import { mockMaaSModels, mockSubscriptions } from '../subscriptions/mockData';
 import type { Subscription, TokenRateLimit } from '../subscriptions/types';
+import { useApiKeysPaths } from '../useApiKeysPaths';
 
 export type ModelStatus = 'available' | 'unavailable';
 
@@ -223,6 +224,7 @@ interface ModelAccessTableProps {
 
 const ModelAccessTable: React.FC<ModelAccessTableProps> = ({ defaultGroup = 'subscription' }) => {
   const navigate = useNavigate();
+  const { subscriptionDetailsPath } = useApiKeysPaths();
   const [groupBy, setGroupBy] = useState<GroupBy>(defaultGroup);
   const [searchValue, setSearchValue] = useState('');
   const [page, setPage] = useState(1);
@@ -316,7 +318,7 @@ const ModelAccessTable: React.FC<ModelAccessTableProps> = ({ defaultGroup = 'sub
       .length;
 
   const navigateToSubDetail = (subId: string) => {
-    navigate(`/genai/subscriptions/${subId}`);
+    navigate(subscriptionDetailsPath(subId));
   };
 
   const itemCount = groupBy === 'model' ? filteredModels.length : userSubscriptions.length;
@@ -567,7 +569,7 @@ const ModelAccessTable: React.FC<ModelAccessTableProps> = ({ defaultGroup = 'sub
                       >
                         <Thead>
                           <Tr resetOffset>
-                            <Th width={60}>Name</Th>
+                            <Th width={60}>Model name</Th>
                             <Th width={40}>Token limits</Th>
                           </Tr>
                         </Thead>

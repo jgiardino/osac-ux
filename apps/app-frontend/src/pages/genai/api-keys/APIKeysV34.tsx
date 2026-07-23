@@ -48,6 +48,7 @@ import { RevokeAllAPIKeysModal, type RevokePreviewMode } from './components/Revo
 import { mockApiKeysAdminV34, mockApiKeysEngineerV34, mockHeavyUserKeysV34 } from './mockDataV34';
 import { useModalFromURL, useUserProfile } from './stubs';
 import type { ApiKeyStatusV34, ApiKeyV34 } from './typesV34';
+import { useApiKeysPaths } from './useApiKeysPaths';
 
 const ALL_STATUSES: ApiKeyStatusV34[] = ['active', 'revoked', 'expired'];
 const DEFAULT_VISIBLE_STATUSES: ApiKeyStatusV34[] = ['active'];
@@ -68,6 +69,7 @@ const APIKeysV34: React.FunctionComponent<APIKeysV34Props> = ({
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { userProfile } = useUserProfile();
+  const { isAdmin: isAdminSurface, keyDetailsPath, subscriptionDetailsPath } = useApiKeysPaths();
   const isAdmin = userProfile === 'AI Admin';
 
   const getInitialKeys = React.useCallback(() => {
@@ -285,7 +287,7 @@ const APIKeysV34: React.FunctionComponent<APIKeysV34Props> = ({
   };
 
   const handleRowClick = (keyId: string) => {
-    navigate(`/genai/api-keys/${keyId}`);
+    navigate(keyDetailsPath(keyId));
   };
 
   const removeToastAlert = (alertKey: React.Key) => {
@@ -378,6 +380,329 @@ const APIKeysV34: React.FunctionComponent<APIKeysV34Props> = ({
     setSearchParams(next, { replace: true });
   };
 
+  const apiKeysPanel = (
+    <>
+        <Toolbar id="api-keys-toolbar-v34">
+          <ToolbarContent>
+            <ToolbarGroup>
+              <ToolbarItem>
+                <Select
+                  id="api-keys-status-filter-v34"
+                  isOpen={isStatusFilterOpen}
+                  selected={Array.from(statusFilters)}
+                  onSelect={handleStatusFilterSelect}
+                  onOpenChange={(isOpen) => setIsStatusFilterOpen(isOpen)}
+                  toggle={(toggleRef) => (
+                    <MenuToggle
+                      ref={toggleRef}
+                      onClick={() => setIsStatusFilterOpen(!isStatusFilterOpen)}
+                      isExpanded={isStatusFilterOpen}
+                      id="api-keys-status-filter-toggle-v34"
+                    >
+                      <Split hasGutter>
+                        <SplitItem isFilled>Status</SplitItem>
+                        {statusFilters.size < ALL_STATUSES.length && (
+                          <SplitItem>
+                            <Badge isRead id="status-filter-badge-v34">
+                              {statusFilters.size}
+                            </Badge>
+                          </SplitItem>
+                        )}
+                      </Split>
+                    </MenuToggle>
+                  )}
+                >
+                  <SelectList id="api-keys-status-filter-list-v34">
+                    {ALL_STATUSES.map((status) => (
+                      <SelectOption
+                        key={status}
+                        value={status}
+                        hasCheckbox
+                        isSelected={statusFilters.has(status)}
+                        id={`status-filter-v34-${status}`}
+                      >
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </SelectOption>
+                    ))}
+                  </SelectList>
+                </Select>
+              </ToolbarItem>
+              {isAdmin && (
+                <ToolbarItem>
+                  <InputGroup>
+                    <InputGroupItem isFill>
+                      <TextInput
+                        id="api-keys-search-v34"
+                        aria-label="Search username"
+                        placeholder="Search username"
+                        value={searchValue}
+                        onChange={(_event, value) => setSearchValue(value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            setSubmittedSearch(searchValue);
+                          }
+                        }}
+                        type="text"
+                      />
+                    </InputGroupItem>
+                    {searchValue && (
+                      <InputGroupItem>
+                        <Button
+                          variant="plain"
+                          aria-label="Clear search"
+                          onClick={() => {
+                            setSearchValue('');
+                            setSubmittedSearch('');
+                          }}
+                          id="api-keys-search-clear-v34"
+                        >
+                          <TimesIcon />
+                        </Button>
+                      </InputGroupItem>
+                    )}
+                    <InputGroupItem>
+                      <Button
+                        variant="control"
+                        aria-label="Search"
+                        onClick={() => setSubmittedSearch(searchValue)}
+                        id="api-keys-search-button-v34"
+                      >
+                        <SearchIcon />
+                      </Button>
+                    </InputGroupItem>
+                  </InputGroup>
+                </ToolbarItem>
+              )}
+            </ToolbarGroup>
+            <ToolbarItem>
+              <Button
+                variant="primary"
+                onClick={() => openCreateModal()}
+                id="create-api-key-button-v34"
+              >
+                Create API key
+              </Button>
+            </ToolbarItem>
+            <ToolbarItem>
+              <Dropdown
+                isOpen={isPageActionsOpen}
+                onOpenChange={(isOpen) => setIsPageActionsOpen(isOpen)}
+                popperProps={{ position: 'right' }}
+                toggle={(toggleRef) => (
+                  <MenuToggle
+                    ref={toggleRef}
+                    onClick={() => setIsPageActionsOpen(!isPageActionsOpen)}
+                    variant="plain"
+                    aria-label="Page actions"
+                    isExpanded={isPageActionsOpen}
+                    id="page-actions-toggle-v34"
+                  >
+                    <EllipsisVIcon />
+                  </MenuToggle>
+                )}
+              >
+                <DropdownList>
+                  {isAdmin ? (
+                    <DropdownItem
+                      key="revoke-all"
+                      onClick={() => {
+                        setIsRevokeAllModalOpen(true);
+                        setIsPageActionsOpen(false);
+                      }}
+                      isDanger
+                      id="revoke-all-keys-action-v34"
+                      tooltipProps={{
+                        content: 'You will select the user in the next step',
+                        position: 'left',
+                      }}
+                    >
+                      Revoke all keys for a single user
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem
+                      key="revoke-all"
+                      onClick={() => {
+                        setIsRevokeAllModalOpen(true);
+                        setIsPageActionsOpen(false);
+                      }}
+                      isDanger
+                      id="revoke-all-keys-action-v34"
+                    >
+                      Revoke all my keys
+                    </DropdownItem>
+                  )}
+                </DropdownList>
+              </Dropdown>
+            </ToolbarItem>
+            <ToolbarItem variant="pagination" align={{ default: 'alignEnd' }}>
+              <Pagination
+                itemCount={filteredApiKeys.length}
+                perPage={perPage}
+                page={page}
+                onSetPage={(_event, newPage) => setPage(newPage)}
+                onPerPageSelect={(_event, newPerPage) => {
+                  setPerPage(newPerPage);
+                  setPage(1);
+                }}
+                perPageOptions={[
+                  { title: '10', value: 10 },
+                  { title: '20', value: 20 },
+                  { title: '50', value: 50 },
+                ]}
+                id="api-keys-pagination-top-v34"
+              />
+            </ToolbarItem>
+          </ToolbarContent>
+        </Toolbar>
+
+        <Table aria-label="API Keys table" id="api-keys-table-v34">
+          <Thead>
+            <Tr>
+              <Th sort={getSortParams(0)}>Name</Th>
+              <Th sort={getSortParams(1)}>Status</Th>
+              <Th sort={getSortParams(2)}>Owner</Th>
+              <Th sort={getSortParams(3)}>Subscription</Th>
+              <Th sort={getSortParams(4)}>Created</Th>
+              <Th sort={getSortParams(5)}>Last used</Th>
+              <Th sort={getSortParams(6)}>Expiration</Th>
+              <Th screenReaderText="Actions" />
+            </Tr>
+          </Thead>
+          <Tbody>
+            {paginatedApiKeys.map((apiKey) => (
+              <Tr key={apiKey.id}>
+                <Td dataLabel="Name">
+                  <div>
+                    <Button
+                      variant="link"
+                      isInline
+                      onClick={() => handleRowClick(apiKey.id)}
+                      id={`api-key-link-v34-${apiKey.id}`}
+                    >
+                      {apiKey.name}
+                    </Button>
+                    {apiKey.description && (
+                      <div style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>
+                        {apiKey.description}
+                      </div>
+                    )}
+                  </div>
+                </Td>
+                <Td dataLabel="Status">{getStatusLabel(apiKey.status)}</Td>
+                <Td dataLabel="Owner">{apiKey.username}</Td>
+                <Td dataLabel="Subscription">
+                  {apiKey.subscriptionId ? (
+                    <Button
+                      variant="link"
+                      isInline
+                      onClick={() => {
+                        const subscriptionId = apiKey.subscriptionId;
+                        if (subscriptionId) {
+                          navigate(subscriptionDetailsPath(subscriptionId));
+                        }
+                      }}
+                      id={`subscription-link-${apiKey.id}`}
+                    >
+                      {apiKey.subscriptionName}
+                    </Button>
+                  ) : (
+                    '—'
+                  )}
+                </Td>
+                <Td dataLabel="Created">{formatDate(apiKey.creationDate)}</Td>
+                <Td dataLabel="Last used">
+                  {apiKey.lastUsedAt ? formatDate(apiKey.lastUsedAt) : '—'}
+                </Td>
+                <Td dataLabel="Expiration">
+                  {apiKey.expirationDate ? formatDate(apiKey.expirationDate) : 'Never'}
+                </Td>
+                <Td isActionCell>
+                  <Dropdown
+                    isOpen={openKebabMenus.has(apiKey.id)}
+                    onOpenChange={(isOpen) => {
+                      if (!isOpen) {
+                        setOpenKebabMenus((prev) => {
+                          const next = new Set(prev);
+                          next.delete(apiKey.id);
+                          return next;
+                        });
+                      }
+                    }}
+                    popperProps={{ position: 'right' }}
+                    toggle={(toggleRef) => (
+                      <MenuToggle
+                        ref={toggleRef}
+                        onClick={() => toggleKebabMenu(apiKey.id)}
+                        variant="plain"
+                        aria-label={`Actions for ${apiKey.name}`}
+                        isExpanded={openKebabMenus.has(apiKey.id)}
+                        id={`api-key-actions-v34-${apiKey.id}`}
+                      >
+                        <EllipsisVIcon />
+                      </MenuToggle>
+                    )}
+                  >
+                    <DropdownList>
+                      <DropdownItem
+                        key="revoke"
+                        onClick={() => {
+                          handleRevokeSingle(apiKey);
+                          toggleKebabMenu(apiKey.id);
+                        }}
+                        id={`revoke-key-v34-${apiKey.id}`}
+                        isDisabled={apiKey.status !== 'active'}
+                        isDanger
+                      >
+                        Revoke
+                      </DropdownItem>
+                    </DropdownList>
+                  </Dropdown>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+
+        <Pagination
+          itemCount={filteredApiKeys.length}
+          perPage={perPage}
+          page={page}
+          onSetPage={(_event, newPage) => setPage(newPage)}
+          onPerPageSelect={(_event, newPerPage) => {
+            setPerPage(newPerPage);
+            setPage(1);
+          }}
+          perPageOptions={[
+            { title: '10', value: 10 },
+            { title: '20', value: 20 },
+            { title: '50', value: 50 },
+          ]}
+          variant="bottom"
+          id="api-keys-pagination-bottom-v34"
+        />
+
+        <CreateAPIKeyModalV34
+          isOpen={isCreateModalOpen}
+          onClose={closeCreateModal}
+          onKeyCreated={handleKeyCreated}
+          currentUsername={getCurrentUsername()}
+          maxExpirationDays={maxExpirationDays}
+          simulateExpiryServerError={simulateExpiryServerError}
+          modelDisplayStyle={modelDisplayStyle}
+        />
+
+        <RevokeAllAPIKeysModal
+          isOpen={isRevokeAllModalOpen}
+          onClose={() => setIsRevokeAllModalOpen(false)}
+          onConfirm={(targetUser) => handleRevokeAll(targetUser)}
+          allKeys={apiKeys}
+          isAdmin={isAdmin}
+          currentUsername={getCurrentUsername()}
+          previewMode={revokePreviewMode}
+        />
+    </>
+  );
+
   return (
     <ListPage
       title="API keys"
@@ -387,335 +712,28 @@ const APIKeysV34: React.FunctionComponent<APIKeysV34Props> = ({
         {toastAlerts}
       </AlertGroup>
 
-      <Tabs activeKey={activeTabKey} onSelect={handlePageTabSelect} id="api-keys-page-tabs">
-        <Tab eventKey="api-keys" title={<TabTitleText>API keys</TabTitleText>} id="api-keys-tab">
-          <Toolbar id="api-keys-toolbar-v34">
-            <ToolbarContent>
-              <ToolbarGroup>
-                <ToolbarItem>
-                  <Select
-                    id="api-keys-status-filter-v34"
-                    isOpen={isStatusFilterOpen}
-                    selected={Array.from(statusFilters)}
-                    onSelect={handleStatusFilterSelect}
-                    onOpenChange={(isOpen) => setIsStatusFilterOpen(isOpen)}
-                    toggle={(toggleRef) => (
-                      <MenuToggle
-                        ref={toggleRef}
-                        onClick={() => setIsStatusFilterOpen(!isStatusFilterOpen)}
-                        isExpanded={isStatusFilterOpen}
-                        id="api-keys-status-filter-toggle-v34"
-                      >
-                        <Split hasGutter>
-                          <SplitItem isFilled>Status</SplitItem>
-                          {statusFilters.size < ALL_STATUSES.length && (
-                            <SplitItem>
-                              <Badge isRead id="status-filter-badge-v34">
-                                {statusFilters.size}
-                              </Badge>
-                            </SplitItem>
-                          )}
-                        </Split>
-                      </MenuToggle>
-                    )}
-                  >
-                    <SelectList id="api-keys-status-filter-list-v34">
-                      {ALL_STATUSES.map((status) => (
-                        <SelectOption
-                          key={status}
-                          value={status}
-                          hasCheckbox
-                          isSelected={statusFilters.has(status)}
-                          id={`status-filter-v34-${status}`}
-                        >
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </SelectOption>
-                      ))}
-                    </SelectList>
-                  </Select>
-                </ToolbarItem>
-                {isAdmin && (
-                  <ToolbarItem>
-                    <InputGroup>
-                      <InputGroupItem isFill>
-                        <TextInput
-                          id="api-keys-search-v34"
-                          aria-label="Search username"
-                          placeholder="Search username"
-                          value={searchValue}
-                          onChange={(_event, value) => setSearchValue(value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              setSubmittedSearch(searchValue);
-                            }
-                          }}
-                          type="text"
-                        />
-                      </InputGroupItem>
-                      {searchValue && (
-                        <InputGroupItem>
-                          <Button
-                            variant="plain"
-                            aria-label="Clear search"
-                            onClick={() => {
-                              setSearchValue('');
-                              setSubmittedSearch('');
-                            }}
-                            id="api-keys-search-clear-v34"
-                          >
-                            <TimesIcon />
-                          </Button>
-                        </InputGroupItem>
-                      )}
-                      <InputGroupItem>
-                        <Button
-                          variant="control"
-                          aria-label="Search"
-                          onClick={() => setSubmittedSearch(searchValue)}
-                          id="api-keys-search-button-v34"
-                        >
-                          <SearchIcon />
-                        </Button>
-                      </InputGroupItem>
-                    </InputGroup>
-                  </ToolbarItem>
-                )}
-              </ToolbarGroup>
-              <ToolbarItem>
-                <Button
-                  variant="primary"
-                  onClick={() => openCreateModal()}
-                  id="create-api-key-button-v34"
-                >
-                  Create API key
-                </Button>
-              </ToolbarItem>
-              <ToolbarItem>
-                <Dropdown
-                  isOpen={isPageActionsOpen}
-                  onOpenChange={(isOpen) => setIsPageActionsOpen(isOpen)}
-                  popperProps={{ position: 'right' }}
-                  toggle={(toggleRef) => (
-                    <MenuToggle
-                      ref={toggleRef}
-                      onClick={() => setIsPageActionsOpen(!isPageActionsOpen)}
-                      variant="plain"
-                      aria-label="Page actions"
-                      isExpanded={isPageActionsOpen}
-                      id="page-actions-toggle-v34"
-                    >
-                      <EllipsisVIcon />
-                    </MenuToggle>
-                  )}
-                >
-                  <DropdownList>
-                    {isAdmin ? (
-                      <DropdownItem
-                        key="revoke-all"
-                        onClick={() => {
-                          setIsRevokeAllModalOpen(true);
-                          setIsPageActionsOpen(false);
-                        }}
-                        isDanger
-                        id="revoke-all-keys-action-v34"
-                        tooltipProps={{
-                          content: 'You will select the user in the next step',
-                          position: 'left',
-                        }}
-                      >
-                        Revoke all keys for a single user
-                      </DropdownItem>
-                    ) : (
-                      <DropdownItem
-                        key="revoke-all"
-                        onClick={() => {
-                          setIsRevokeAllModalOpen(true);
-                          setIsPageActionsOpen(false);
-                        }}
-                        isDanger
-                        id="revoke-all-keys-action-v34"
-                      >
-                        Revoke all my keys
-                      </DropdownItem>
-                    )}
-                  </DropdownList>
-                </Dropdown>
-              </ToolbarItem>
-              <ToolbarItem variant="pagination" align={{ default: 'alignEnd' }}>
-                <Pagination
-                  itemCount={filteredApiKeys.length}
-                  perPage={perPage}
-                  page={page}
-                  onSetPage={(_event, newPage) => setPage(newPage)}
-                  onPerPageSelect={(_event, newPerPage) => {
-                    setPerPage(newPerPage);
-                    setPage(1);
-                  }}
-                  perPageOptions={[
-                    { title: '10', value: 10 },
-                    { title: '20', value: 20 },
-                    { title: '50', value: 50 },
-                  ]}
-                  id="api-keys-pagination-top-v34"
-                />
-              </ToolbarItem>
-            </ToolbarContent>
-          </Toolbar>
-
-          <Table aria-label="API Keys table" id="api-keys-table-v34">
-            <Thead>
-              <Tr>
-                <Th sort={getSortParams(0)}>Name</Th>
-                <Th sort={getSortParams(1)}>Status</Th>
-                <Th sort={getSortParams(2)}>Owner</Th>
-                <Th sort={getSortParams(3)}>Subscription</Th>
-                <Th sort={getSortParams(4)}>Created</Th>
-                <Th sort={getSortParams(5)}>Last used</Th>
-                <Th sort={getSortParams(6)}>Expiration</Th>
-                <Th screenReaderText="Actions" />
-              </Tr>
-            </Thead>
-            <Tbody>
-              {paginatedApiKeys.map((apiKey) => (
-                <Tr key={apiKey.id}>
-                  <Td dataLabel="Name">
-                    <div>
-                      <Button
-                        variant="link"
-                        isInline
-                        onClick={() => handleRowClick(apiKey.id)}
-                        id={`api-key-link-v34-${apiKey.id}`}
-                      >
-                        {apiKey.name}
-                      </Button>
-                      {apiKey.description && (
-                        <div style={{ color: 'var(--pf-t--global--text--color--subtle)' }}>
-                          {apiKey.description}
-                        </div>
-                      )}
-                    </div>
-                  </Td>
-                  <Td dataLabel="Status">{getStatusLabel(apiKey.status)}</Td>
-                  <Td dataLabel="Owner">{apiKey.username}</Td>
-                  <Td dataLabel="Subscription">
-                    {apiKey.subscriptionId ? (
-                      <Button
-                        variant="link"
-                        isInline
-                        onClick={() => navigate(`/genai/subscriptions/${apiKey.subscriptionId}`)}
-                        id={`subscription-link-${apiKey.id}`}
-                      >
-                        {apiKey.subscriptionName}
-                      </Button>
-                    ) : (
-                      '—'
-                    )}
-                  </Td>
-                  <Td dataLabel="Created">{formatDate(apiKey.creationDate)}</Td>
-                  <Td dataLabel="Last used">
-                    {apiKey.lastUsedAt ? formatDate(apiKey.lastUsedAt) : '—'}
-                  </Td>
-                  <Td dataLabel="Expiration">
-                    {apiKey.expirationDate ? formatDate(apiKey.expirationDate) : 'Never'}
-                  </Td>
-                  <Td isActionCell>
-                    <Dropdown
-                      isOpen={openKebabMenus.has(apiKey.id)}
-                      onOpenChange={(isOpen) => {
-                        if (!isOpen) {
-                          setOpenKebabMenus((prev) => {
-                            const next = new Set(prev);
-                            next.delete(apiKey.id);
-                            return next;
-                          });
-                        }
-                      }}
-                      popperProps={{ position: 'right' }}
-                      toggle={(toggleRef) => (
-                        <MenuToggle
-                          ref={toggleRef}
-                          onClick={() => toggleKebabMenu(apiKey.id)}
-                          variant="plain"
-                          aria-label={`Actions for ${apiKey.name}`}
-                          isExpanded={openKebabMenus.has(apiKey.id)}
-                          id={`api-key-actions-v34-${apiKey.id}`}
-                        >
-                          <EllipsisVIcon />
-                        </MenuToggle>
-                      )}
-                    >
-                      <DropdownList>
-                        <DropdownItem
-                          key="revoke"
-                          onClick={() => {
-                            handleRevokeSingle(apiKey);
-                            toggleKebabMenu(apiKey.id);
-                          }}
-                          id={`revoke-key-v34-${apiKey.id}`}
-                          isDisabled={apiKey.status !== 'active'}
-                          isDanger
-                        >
-                          Revoke
-                        </DropdownItem>
-                      </DropdownList>
-                    </Dropdown>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-
-          <Pagination
-            itemCount={filteredApiKeys.length}
-            perPage={perPage}
-            page={page}
-            onSetPage={(_event, newPage) => setPage(newPage)}
-            onPerPageSelect={(_event, newPerPage) => {
-              setPerPage(newPerPage);
-              setPage(1);
-            }}
-            perPageOptions={[
-              { title: '10', value: 10 },
-              { title: '20', value: 20 },
-              { title: '50', value: 50 },
-            ]}
-            variant="bottom"
-            id="api-keys-pagination-bottom-v34"
-          />
-
-          <CreateAPIKeyModalV34
-            isOpen={isCreateModalOpen}
-            onClose={closeCreateModal}
-            onKeyCreated={handleKeyCreated}
-            currentUsername={getCurrentUsername()}
-            maxExpirationDays={maxExpirationDays}
-            simulateExpiryServerError={simulateExpiryServerError}
-            modelDisplayStyle={modelDisplayStyle}
-          />
-
-          <RevokeAllAPIKeysModal
-            isOpen={isRevokeAllModalOpen}
-            onClose={() => setIsRevokeAllModalOpen(false)}
-            onConfirm={(targetUser) => handleRevokeAll(targetUser)}
-            allKeys={apiKeys}
-            isAdmin={isAdmin}
-            currentUsername={getCurrentUsername()}
-            previewMode={revokePreviewMode}
-          />
-        </Tab>
-        <Tab
-          eventKey="subscriptions"
-          title={<TabTitleText>Subscriptions</TabTitleText>}
-          id="api-keys-subscriptions-tab"
-        >
-          <Content component={ContentVariants.p}>
-            View your subscriptions and the models they give you access to.
-          </Content>
-          <ModelAccessTable defaultGroup="subscription" />
-        </Tab>
-      </Tabs>
+      {isAdminSurface ? (
+        apiKeysPanel
+      ) : (
+        <Tabs activeKey={activeTabKey} onSelect={handlePageTabSelect} id="api-keys-page-tabs">
+          <Tab eventKey="api-keys" title={<TabTitleText>API keys</TabTitleText>} id="api-keys-tab">
+            {apiKeysPanel}
+          </Tab>
+          <Tab
+            eventKey="subscriptions"
+            title={<TabTitleText>Subscriptions</TabTitleText>}
+            id="api-keys-subscriptions-tab"
+          >
+            <Content component={ContentVariants.p}>
+              View your subscriptions and the models they give you access to.
+            </Content>
+            <ModelAccessTable defaultGroup="subscription" />
+          </Tab>
+        </Tabs>
+      )}
     </ListPage>
   );
+
 };
 
 export { APIKeysV34 };

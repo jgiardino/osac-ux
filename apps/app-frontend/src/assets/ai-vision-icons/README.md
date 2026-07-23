@@ -32,6 +32,7 @@ keep `AiVisionIcons.tsx` in sync.
 | `rh-ui-ai-edit-icon.svg` | Playground | `RhUiAiEditIcon` |
 | `rh-ui-key-icon.svg` | API keys | `RhUiKeyIcon` |
 | `rh-ui-location-pin-icon.svg` | AI asset endpoints | `RhUiLocationPinIcon` |
+| `rh-ui-icon-ai-model.svg` | AI Models | `RhUiAiModelIcon` |
 
 ## How to swap artwork
 

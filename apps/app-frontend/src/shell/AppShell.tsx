@@ -49,7 +49,6 @@ import { ClusterRoutes } from '@osac/ui-components/pages/tenant/ClusterRoutes';
 import { LoadBalancerFormPage } from '@osac/ui-components/pages/tenant/LoadBalancerFormPage';
 import { LoadBalancersPage } from '@osac/ui-components/pages/tenant/LoadBalancersPage';
 import { MaaSCreatePage } from '@osac/ui-components/pages/tenant/MaaSCreatePage';
-import { MaaSListPage } from '@osac/ui-components/pages/tenant/MaaSListPage';
 import { NetworkRoutes } from '@osac/ui-components/pages/tenant/NetworkRoutes';
 import { ObjectStorageDetailPage } from '@osac/ui-components/pages/tenant/ObjectStorageDetailPage';
 import { ObjectStorageEditPage } from '@osac/ui-components/pages/tenant/ObjectStorageEditPage';
@@ -71,6 +70,7 @@ import { ShellMasthead } from './ShellMasthead';
 import { defaultRouteForRole } from './shellRoutes';
 import { shellRoutesAiVision } from './shellRoutesAiVision';
 import { ShellSidebar } from './ShellSidebar';
+import { ModelsRouteSwitch } from '../pages/ai-models';
 
 const RoleRoute = ({
   allow,
@@ -579,7 +579,7 @@ const AppShellInner = ({ logout }: { logout: () => Promise<void> }) => {
           path="/models"
           element={
             <RoleRoute allow={['tenantUser', 'tenantAdmin']} fallback={defaultRoute}>
-              <MaaSListPage />
+              <ModelsRouteSwitch />
             </RoleRoute>
           }
         />

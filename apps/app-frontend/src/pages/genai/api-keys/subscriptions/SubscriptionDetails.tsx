@@ -23,6 +23,7 @@ import { ResourceDetailHeader } from '@osac/ui-components/components/Resource/Re
 import { ResourceDetailsPageError } from '@osac/ui-components/components/Resource/ResourceDetailsPageError';
 
 import { useDocumentTitle } from '../stubs';
+import { useApiKeysPaths } from '../useApiKeysPaths';
 import { SubscriptionDetailsTab } from './components/SubscriptionDetailsTab';
 import { SubscriptionYamlTab } from './components/SubscriptionYamlTab';
 import { getSubscriptionById } from './mockData';
@@ -30,11 +31,10 @@ import type { Subscription } from './types';
 
 type TabKey = 'details' | 'yaml';
 
-const SUBSCRIPTIONS_LIST_PATH = '/genai/api-keys?tab=subscriptions';
-
 const SubscriptionDetails: React.FunctionComponent = () => {
   const { subscriptionId, tab } = useParams<{ subscriptionId: string; tab?: string }>();
   const navigate = useNavigate();
+  const { subscriptionsListPath, subscriptionDetailsPath } = useApiKeysPaths();
   const [activeTabKey, setActiveTabKey] = React.useState<TabKey>((tab as TabKey) || 'details');
   const [isActionsOpen, setIsActionsOpen] = React.useState(false);
 
@@ -65,13 +65,15 @@ const SubscriptionDetails: React.FunctionComponent = () => {
   ) => {
     const newTab = tabIndex as TabKey;
     setActiveTabKey(newTab);
-    navigate(`/genai/subscriptions/${subscriptionId}/${newTab}`, { replace: true });
+    if (subscriptionId) {
+      navigate(subscriptionDetailsPath(subscriptionId, newTab), { replace: true });
+    }
   };
 
   if (!subscription) {
     return (
       <ResourceDetailsPageError
-        parentTo={SUBSCRIPTIONS_LIST_PATH}
+        parentTo={subscriptionsListPath}
         parentLabel="Subscriptions"
         resourceLabel="subscription"
         variant="not-found"
@@ -123,7 +125,7 @@ const SubscriptionDetails: React.FunctionComponent = () => {
             >
               <FlexItem>
                 <ResourceDetailHeader
-                  parentTo={SUBSCRIPTIONS_LIST_PATH}
+                  parentTo={subscriptionsListPath}
                   parentLabel="Subscriptions"
                   resourceName={subscription.displayName}
                   description={subscription.description}

@@ -7,6 +7,8 @@ import { PlaceholderPage } from '@osac/ui-components/PlaceholderPage';
 import type { DemoShellRole } from '@osac/ui-components/shellTypes';
 
 import { useAiVisionLayer } from './AiVisionLayerContext';
+import { MaaSGovernancePage } from '../pages/admin/maas-governance';
+import { ModelCatalogSettingsPage } from '../pages/admin/model-catalog-settings';
 import {
   ApiKeyDetailsPage,
   ApiKeysPage,
@@ -120,9 +122,28 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/admin/ai/maas-governance"
       element={
         <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+          <MaaSGovernancePage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/admin/ai/maas-governance/create-subscription"
+      element={
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
           <PlaceholderPage
-            title="MaaS governance"
-            lede="Manage which AI gateway endpoints are available to developers. Assign policies, subscriptions, and access groups."
+            title="Create subscription"
+            lede="Subscription create flow from the MaaS governance prototype is not wired in this platform build yet."
+          />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/admin/ai/maas-governance/create-auth-policy"
+      element={
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+          <PlaceholderPage
+            title="Create authorization policy"
+            lede="Authorization policy create flow from the MaaS governance prototype is not wired in this platform build yet."
           />
         </AiVisionRoleRoute>
       }
@@ -131,10 +152,31 @@ export const shellRoutesAiVision = (defaultRoute: string) => (
       path="/admin/ai/model-catalog-settings"
       element={
         <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
-          <PlaceholderPage
-            title="Model catalog settings"
-            lede="Configure sources of models available for tenant users to customize and deploy (base model library — not AI asset endpoints). In the current prototype, SKU and catalog authoring may still live under provider Catalog Studio."
-          />
+          <ModelCatalogSettingsPage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/admin/ai/api-keys"
+      element={
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+          <ApiKeysPage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/admin/ai/api-keys/:keyId"
+      element={
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+          <ApiKeyDetailsPage />
+        </AiVisionRoleRoute>
+      }
+    />
+    <Route
+      path="/admin/ai/subscriptions/:subscriptionId/:tab?"
+      element={
+        <AiVisionRoleRoute allow={['tenantAdmin']} fallback={defaultRoute}>
+          <SubscriptionDetailsPage />
         </AiVisionRoleRoute>
       }
     />
