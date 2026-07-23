@@ -12,10 +12,15 @@ import { type NavLink, navRowsForRole } from './shellNav';
 import { isAiVisionNavItem, mergeAiVisionNav } from './shellNavAiVision';
 import { RhUiAiExperienceIcon } from '../assets/ai-vision-icons/AiVisionIcons';
 
-const ShellNavItem = ({ item }: { item: NavLink }) => {
+const ShellNavItem = ({
+  item,
+  showAiLabel,
+}: {
+  item: NavLink;
+  showAiLabel: boolean;
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const showAiLabel = isAiVisionNavItem(item.id);
 
   return (
     <NavItem
@@ -58,7 +63,11 @@ export const ShellSidebar = () => {
           {navRows.map((section) => (
             <NavGroup key={section.sectionId} title={section.label}>
               {section.children.map((item) => (
-                <ShellNavItem key={item.id} item={item} />
+                <ShellNavItem
+                  key={item.id}
+                  item={item}
+                  showAiLabel={isAiVisionLayer && isAiVisionNavItem(item.id)}
+                />
               ))}
             </NavGroup>
           ))}
