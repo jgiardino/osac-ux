@@ -699,9 +699,9 @@ const UsageExampleModal: React.FunctionComponent<{
 
 // Mock data for user's API keys and subscriptions
 const _mockUserApiKeys = [
-  { id: 'key-1', name: 'Production Key', token: 'sk-prod-abc123xyz789...', createdAt: '2026-01-15' },
-  { id: 'key-2', name: 'Development Key', token: 'sk-dev-def456uvw012...', createdAt: '2026-01-20' },
-  { id: 'key-3', name: 'Testing Key', token: 'sk-test-ghi789rst345...', createdAt: '2026-02-01' }
+  { id: 'key-1', name: 'Production Key', token: 'mock-prod-abc123xyz789...', createdAt: '2026-01-15' },
+  { id: 'key-2', name: 'Development Key', token: 'mock-dev-def456uvw012...', createdAt: '2026-01-20' },
+  { id: 'key-3', name: 'Testing Key', token: 'mock-test-ghi789rst345...', createdAt: '2026-02-01' }
 ];
 void _mockUserApiKeys;
 
@@ -743,7 +743,7 @@ const MaaSEndpointModal: React.FunctionComponent<{
     setShowEphemeralToken(false);
     await new Promise(resolve => setTimeout(resolve, 1200));
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let key = 'sk-maas-';
+    let key = 'mock-maas-';
     for (let i = 0; i < 40; i++) {
       key += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -1431,9 +1431,9 @@ const mockModels: ModelAsset[] = [
     displayName: 'Llama 3.1 8B General',
     slug: 'llama-3-1-8b-instruct',
     internalEndpoint: 'http://llama-3-1-8b.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-token-123',
+    internalToken: 'mock-internal-token-123',
     externalEndpoint: 'https://api.demo.openshift.ai/models/llama-3-1-8b/v1',
-    externalToken: 'sk-external-token-456',
+    externalToken: 'mock-external-token-456',
     llsStatus: 'registered',
     useCase: 'General chat',
     description: 'Meta Llama 3.1 8B parameter model optimized for instruction following',
@@ -1451,7 +1451,7 @@ const mockModels: ModelAsset[] = [
     displayName: 'Granite 7B Code',
     slug: 'granite-7b-code',
     internalEndpoint: 'http://granite-7b-code.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-granite-789',
+    internalToken: 'mock-internal-granite-789',
     llsStatus: 'not-registered',
     useCase: 'Code generation',
     description: 'IBM Granite 7B model specialized for code generation tasks',
@@ -1468,9 +1468,9 @@ const mockModels: ModelAsset[] = [
     displayName: 'Mistral 7B Reasoning',
     slug: 'mistral-7b-instruct',
     internalEndpoint: 'http://mistral-7b.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-mistral-abc',
+    internalToken: 'mock-internal-mistral-abc',
     externalEndpoint: 'https://api.demo.openshift.ai/models/mistral-7b/v1',
-    externalToken: 'sk-external-mistral-def',
+    externalToken: 'mock-external-mistral-def',
     llsStatus: 'registered',
     useCase: 'Multilingual, Reasoning',
     description: 'Mistral 7B instruction-tuned model for general purpose tasks',
@@ -1487,7 +1487,7 @@ const mockModels: ModelAsset[] = [
     displayName: 'Mistral 7B Translation',
     slug: 'mistral-7b-instruct-translation',
     internalEndpoint: 'http://mistral-7b-translate.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-mistral-translate-xyz',
+    internalToken: 'mock-internal-mistral-translate-xyz',
     llsStatus: 'registered',
     useCase: 'Translation',
     description: 'Mistral 7B configured for multilingual translation tasks',
@@ -1504,9 +1504,9 @@ const mockModels: ModelAsset[] = [
     displayName: 'GPT OSS 120B',
     slug: 'gpt-oss-120b-fp8-dynamic',
     internalEndpoint: 'http://gpt-oss-120b.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-gpt-oss-120b-xyz',
+    internalToken: 'mock-internal-gpt-oss-120b-xyz',
     externalEndpoint: 'https://api.demo.openshift.ai/models/gpt-oss-120b/v1',
-    externalToken: 'sk-external-gpt-oss-120b-abc',
+    externalToken: 'mock-external-gpt-oss-120b-abc',
     llsStatus: 'not-registered',
     useCase: 'Text generation',
     description: 'For production, general purpose, high reasoning use cases that fit into a single 80GB GPU (like NVIDIA H100 or AMD MI300X) (117B parameters with 5.1B active parameters)',
@@ -1524,9 +1524,9 @@ const mockModels: ModelAsset[] = [
     displayName: 'Pixtral Large Vision',
     slug: 'pixtral-large-instruct-2411-hf-quantized-w8a8',
     internalEndpoint: 'http://pixtral-large.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-pixtral-abc123',
+    internalToken: 'mock-internal-pixtral-abc123',
     externalEndpoint: 'https://api.demo.openshift.ai/models/pixtral-large/v1',
-    externalToken: 'sk-external-pixtral-789',
+    externalToken: 'mock-external-pixtral-789',
     llsStatus: 'not-registered',
     useCase: 'Vision, Multimodal',
     description: 'This model was obtained by quantizing the weights of neuralmagic/Pixtral-Large-Instruct-2411-hf to INT8 data type, ready for inference with vLLM >= 0.5.2.',
@@ -1544,9 +1544,9 @@ const mockModels: ModelAsset[] = [
     displayName: 'Code Llama 34B',
     slug: 'codellama-34b-instruct',
     internalEndpoint: 'http://codellama-34b.demo-namespace.svc.cluster.local:8080/v1',
-    internalToken: 'sk-internal-codellama-456',
+    internalToken: 'mock-internal-codellama-456',
     externalEndpoint: 'https://api.demo.openshift.ai/models/codellama-34b/v1',
-    externalToken: 'sk-external-codellama-789',
+    externalToken: 'mock-external-codellama-789',
     llsStatus: 'registered',
     useCase: 'Code generation',
     description: 'Meta Code Llama 34B instruction-tuned model for code generation and understanding',
@@ -1566,7 +1566,7 @@ const mockModels: ModelAsset[] = [
     slug: 'customer-support-gpt-4o',
     internalEndpoint: '',
     externalEndpoint: 'https://api.openai.com/v1',
-    externalToken: 'sk-ext-cs-gpt4o-abc',
+    externalToken: 'mock-ext-cs-gpt4o-abc',
     llsStatus: 'registered',
     useCase: 'Customer support',
     description: 'GPT-4o configured for customer support workflows',
@@ -1585,7 +1585,7 @@ const mockModels: ModelAsset[] = [
     slug: 'internal-docs-gpt-4o',
     internalEndpoint: '',
     externalEndpoint: 'https://api.openai.com/v1',
-    externalToken: 'sk-ext-docs-gpt4o-xyz',
+    externalToken: 'mock-ext-docs-gpt4o-xyz',
     llsStatus: 'registered',
     useCase: 'Documentation Q&A',
     description: 'GPT-4o configured for internal documentation queries',
@@ -1604,7 +1604,7 @@ const mockModels: ModelAsset[] = [
     slug: 'code-review-claude',
     internalEndpoint: '',
     externalEndpoint: 'https://api.anthropic.com/v1',
-    externalToken: 'sk-ext-claude-code-review',
+    externalToken: 'mock-ext-claude-code-review',
     llsStatus: 'registered',
     useCase: 'Code review',
     description: 'Claude Sonnet configured for automated code review',
@@ -1623,7 +1623,7 @@ const mockModels: ModelAsset[] = [
     slug: 'gemini-flash-experiment',
     internalEndpoint: '',
     externalEndpoint: 'https://generativelanguage.googleapis.com/v1beta',
-    externalToken: 'sk-ext-gemini-experiment',
+    externalToken: 'mock-ext-gemini-experiment',
     llsStatus: 'not-registered',
     useCase: 'Experimentation',
     description: 'Gemini 2.0 Flash endpoint — status cannot be verified.',
@@ -1642,7 +1642,7 @@ const mockModels: ModelAsset[] = [
     slug: 'sales-analytics-gpt-4o',
     internalEndpoint: '',
     externalEndpoint: 'https://api.openai.com/v1',
-    externalToken: 'sk-ext-sales-gpt4o-def',
+    externalToken: 'mock-ext-sales-gpt4o-def',
     llsStatus: 'registered',
     useCase: 'Sales forecasting',
     description: 'GPT-4o configured for sales pipeline analysis and forecasting',
@@ -1661,7 +1661,7 @@ const mockModels: ModelAsset[] = [
     slug: 'content-moderation-claude',
     internalEndpoint: '',
     externalEndpoint: 'https://api.anthropic.com/v1',
-    externalToken: 'sk-ext-claude-moderation',
+    externalToken: 'mock-ext-claude-moderation',
     llsStatus: 'registered',
     useCase: 'Content moderation',
     description: 'Claude Sonnet configured for content safety and moderation',
@@ -1680,7 +1680,7 @@ const mockModels: ModelAsset[] = [
     slug: 'gemini-flash-summarizer',
     internalEndpoint: '',
     externalEndpoint: 'https://generativelanguage.googleapis.com/v1beta',
-    externalToken: 'sk-ext-gemini-summarizer',
+    externalToken: 'mock-ext-gemini-summarizer',
     llsStatus: 'registered',
     useCase: 'Summarization',
     description: 'Gemini 2.0 Flash configured for document summarization',
@@ -1904,7 +1904,7 @@ const AvailableAIAssets: React.FunctionComponent = () => {
       slug: 'ibm-granite-granite-embedding-125m-english',
       internalEndpoint: '',
       externalEndpoint: 'https://inference.example.com/v1',
-      externalToken: 'sk-••••••••••••',
+      externalToken: 'mock-••••••••••••',
       llsStatus: 'not-registered',
       useCase: 'RAG experimentation',
       logo: modelLogos['generic-model-icon'],
@@ -1922,7 +1922,7 @@ const AvailableAIAssets: React.FunctionComponent = () => {
       slug: 'nomic-ai-nomic-embed-text-v1.5',
       internalEndpoint: '',
       externalEndpoint: 'https://inference.example.com/v1',
-      externalToken: 'sk-••••••••••••',
+      externalToken: 'mock-••••••••••••',
       llsStatus: 'not-registered',
       useCase: 'Semantic search',
       logo: modelLogos['generic-model-icon'],
@@ -2768,7 +2768,7 @@ const AvailableAIAssets: React.FunctionComponent = () => {
     
     // Simulate token generation
     setTimeout(() => {
-      const newToken = `sk-maas-${Math.random().toString(36).substring(2, 15)}-${Date.now()}`;
+      const newToken = `mock-maas-${Math.random().toString(36).substring(2, 15)}-${Date.now()}`;
       setGeneratedTokens(prev => new Map(prev.set(modelId, newToken)));
       setIsGeneratingToken(prev => {
         const newSet = new Set(prev);

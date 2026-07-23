@@ -1824,7 +1824,7 @@ const modelAccesses = [
     status: {
       state: 'ACTIVE',
       endpoint: 'https://maas.apps.prod.rhoai.example.com/llama-3-2-3b/v1',
-      apiKey: 'sk-maas-a1b2c3d4e5f6',
+      apiKey: 'mock-maas-a1b2c3d4e5f6',
     },
   },
   {
@@ -1838,7 +1838,7 @@ const modelAccesses = [
     status: {
       state: 'ACTIVE',
       endpoint: 'https://maas.apps.prod.rhoai.example.com/granite-3-3-8b/v1',
-      apiKey: 'sk-maas-f6e5d4c3b2a1',
+      apiKey: 'mock-maas-f6e5d4c3b2a1',
     },
   },
 ];

@@ -300,16 +300,16 @@ export interface AssetEndpointMCPServer {
 }
 
 const tokenBySlug: Record<string, string> = {
-  'mcp-kubernetes-server': 'sk-k8s-stream-token-abc123',
-  'slack-mcp-server': 'sk-slack-stream-token-def456',
-  'servicenow-mcp-server': 'sk-servicenow-stream-token-jkl012',
-  'salesforce-mcp-server': 'sk-salesforce-stream-token-mno345',
-  'splunk-mcp-server': 'sk-splunk-stream-token-pqr678',
-  'dynatrace-mcp-server': 'sk-dynatrace-stream-token-ghi789',
-  'github-mcp-server': 'sk-github-stream-token-stu901',
-  'postgres-mcp-server': 'sk-postgres-stream-token-vwx234',
-  'zapier-mcp-server': 'sk-zapier-stream-token-yzab567',
-  'mariadb-mcp-server': 'sk-mariadb-stream-token-cde890',
+  'mcp-kubernetes-server': 'mock-k8s-stream-token-abc123',
+  'slack-mcp-server': 'mock-slack-stream-token-def456',
+  'servicenow-mcp-server': 'mock-servicenow-stream-token-jkl012',
+  'salesforce-mcp-server': 'mock-salesforce-stream-token-mno345',
+  'splunk-mcp-server': 'mock-splunk-stream-token-pqr678',
+  'dynatrace-mcp-server': 'mock-dynatrace-stream-token-ghi789',
+  'github-mcp-server': 'mock-github-stream-token-stu901',
+  'postgres-mcp-server': 'mock-postgres-stream-token-vwx234',
+  'zapier-mcp-server': 'mock-zapier-stream-token-yzab567',
+  'mariadb-mcp-server': 'mock-mariadb-stream-token-cde890',
 };
 
 /** Lookup a catalog server by slug. */

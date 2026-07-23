@@ -133,7 +133,7 @@ const CreateAPIKeyModalV34: React.FunctionComponent<CreateAPIKeyModalV34Props> =
 
   const generateAPIKey = (): { key: string; prefix: string } => {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let key = 'sk-oai-';
+    let key = 'mock-key-';
     for (let i = 0; i < 48; i++) {
       key += chars.charAt(Math.floor(Math.random() * chars.length));
     }
