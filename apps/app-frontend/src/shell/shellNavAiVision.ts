@@ -90,21 +90,23 @@ const mergeTenantAdminVisionNav = (rows: NavRow[], t: TFunction): NavRow[] =>
     ],
   });
 
-/** Returns baseline rows unchanged when the vision layer is off. */
+/** Keeps tenant-user rows unchanged when the vision layer is off; admins always see AI governance. */
 export const mergeAiVisionNav = (
   rows: NavRow[],
   role: DemoShellRole,
   t: TFunction,
   enabled: boolean,
 ): NavRow[] => {
+  // Tenant admins always need their AI governance entry points. The vision
+  // switch continues to gate the tenant-user AI experience.
+  if (role === 'tenantAdmin') {
+    return mergeTenantAdminVisionNav(rows, t);
+  }
   if (!enabled) {
     return rows;
   }
   if (role === 'tenantUser') {
     return mergeTenantUserVisionNav(rows, t);
-  }
-  if (role === 'tenantAdmin') {
-    return mergeTenantAdminVisionNav(rows, t);
   }
   return rows;
 };

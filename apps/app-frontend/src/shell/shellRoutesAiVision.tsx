@@ -31,7 +31,7 @@ const AiVisionRoleRoute = ({
 }) => {
   const { role } = useSession();
   const { isAiVisionLayer } = useAiVisionLayer();
-  if (!isAiVisionLayer || !allow.includes(role)) {
+  if (!allow.includes(role) || (!isAiVisionLayer && role !== 'tenantAdmin')) {
     return <Navigate to={fallback} replace />;
   }
   return <ErrorBoundary>{children}</ErrorBoundary>;
